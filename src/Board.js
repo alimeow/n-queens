@@ -149,17 +149,26 @@
       // diagonal array that will hold the specififed diagonal at index given
       let index = majorDiagonalColumnIndexAtFirstRow;
       let diagonalArray = [];
-      // let counter = 0;
+      // make a new matrix that is a copy of the original matrix
+      let newMatrix = [...this.rows()];
+      // in order to only check the rows we want to check per iteration
+      // splice the new matrix to remove the first n rows based on the index value passed in
+      newMatrix.splice(0, index);
+      console.log(newMatrix);
+
+      // this counter lets us know what row we are on
+      let counter = 0;
       // looping through each row
       // check if our row/col pair is out of bounds
         // if not, push that value into diagonal array
         // if it is, break;
-      for (let i = 0; i < this.rows().length; i++) {
-        if (!this._isInBounds(i, index + i)) {
+      for (let i = 0; i < newMatrix.length; i++) {
+        if (!this._isInBounds(i, counter + i)) {
           break;
         }
-        diagonalArray.push(this.rows()[i][index + i]);
+        diagonalArray.push(newMatrix[i][counter + i]);
       }
+
       console.log(diagonalArray);
 
       return diagonalArray.filter( item => item === 1 ).length > 1 ? true : false;
@@ -172,7 +181,9 @@
       // check if above function is equal to true, if yes, return true
       // else return false;
 
-      for (let k = 0; k < this.rows()[0].length; k++) {
+      console.log(this.rows());
+
+      for (let k = 0; k < this.rows().length; k++) {
         if (this.hasMajorDiagonalConflictAt(k)) {
           return true;
         }
