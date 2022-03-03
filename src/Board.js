@@ -85,7 +85,7 @@
       // filter out all 1's into new array and then check length
       // if length is greater than 1 , returns true, there is conflict
       // else returns false
-      return rowIndex.filter(item => item === 1).length > 1 ? true : false;
+      return this.rows()[rowIndex].filter(item => item === 1).length > 1 ? true : false;
 
       // return false; // fixme
     },
@@ -98,7 +98,7 @@
         // if true , return true
         // if all false, automatically return false
       for (var i = 0; i < this.rows().length; i++) {
-        if (this.hasRowConflictAt(this.rows()[i])) {
+        if (this.hasRowConflictAt(i)) {
           return true;
         }
       }
@@ -111,8 +111,14 @@
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
       // this should be the same as our hasRowConflict solution, just checking columns instead of rows
+      // var columns = [];
+      // for (let i = 0; i < this.rows().length; i++) {
+      //   columns.push(this.rows().map(row => row[i]));
+      // }
 
-      return colIndex.filter( item => item === 1 ).length > 1 ? true : false;
+      let col = this.rows().map(row => row[colIndex]);
+
+      return col.filter( item => item === 1 ).length > 1 ? true : false;
 
       //return false; // fixme
     },
@@ -124,13 +130,9 @@
 
       // loop through the board rows (this.rows())
       // call .map on the board rows , with the callback function only relacing each value with the value of row[i]
-      var columns = [];
-      for (let i = 0; i < this.rows().length; i++) {
-        columns.push(this.rows().map(row => row[i]));
-      }
 
-      for (let j = 0; j < columns.length; j++) {
-        if (this.hasColConflictAt(columns[j])) {
+      for (let j = 0; j < this.rows().length; j++) {
+        if (this.hasColConflictAt(j)) {
           return true;
         }
       }
@@ -144,11 +146,37 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // diagonal array that will hold the specififed diagonal at index given
+      let index = majorDiagonalColumnIndexAtFirstRow;
+      let diagonalArray = [];
+      // let counter = 0;
+      // looping through each row
+      // check if our row/col pair is out of bounds
+        // if not, push that value into diagonal array
+        // if it is, break;
+      for (let i = 0; i < this.rows().length; i++) {
+        if (!this._isInBounds(i, index + i)) {
+          break;
+        }
+        diagonalArray.push(this.rows()[i][index + i]);
+      }
+      console.log(diagonalArray);
+
+      return diagonalArray.filter( item => item === 1 ).length > 1 ? true : false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      // loop through size first row
+      // call hasMajorDiagonalConflictAt for each index of the first row
+      // check if above function is equal to true, if yes, return true
+      // else return false;
+
+      for (let k = 0; k < this.rows()[0].length; k++) {
+        if (this.hasMajorDiagonalConflictAt(k)) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
