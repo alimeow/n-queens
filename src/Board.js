@@ -79,26 +79,61 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      // loop through passed in row, if there are more than one pieces, return true
+      // if not after looping through all indexes, return false
+
+      // filter out all 1's into new array and then check length
+      // if length is greater than 1 , returns true, there is conflict
+      // else returns false
+      return rowIndex.filter(item => item === 1).length > 1 ? true : false;
+
+      // return false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      // loop through boards rows
+      // pass each row into hasRowConflicts
+      // check result of that call
+        // if true , return true
+        // if all false, automatically return false
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.hasRowConflictAt(this.rows()[i])) {
+          return true;
+        }
+      }
+      return false;
     },
-
-
 
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      // this should be the same as our hasRowConflict solution, just checking columns instead of rows
+
+      return colIndex.filter( item => item === 1 ).length > 1 ? true : false;
+
+      //return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      // declare columnsArray to be an empty array
+      // find a way to grab each column as it's own array and push it into the columnsArray
+
+      // loop through the board rows (this.rows())
+      // call .map on the board rows , with the callback function only relacing each value with the value of row[i]
+      var columns = [];
+      for (let i = 0; i < this.rows().length; i++) {
+        columns.push(this.rows().map(row => row[i]));
+      }
+
+      for (let j = 0; j < columns.length; j++) {
+        if (this.hasColConflictAt(columns[j])) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
