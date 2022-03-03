@@ -116,6 +116,8 @@
       //   columns.push(this.rows().map(row => row[i]));
       // }
 
+
+
       let col = this.rows().map(row => row[colIndex]);
 
       return col.filter( item => item === 1 ).length > 1 ? true : false;
@@ -147,31 +149,86 @@
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       // diagonal array that will hold the specififed diagonal at index given
-      let index = majorDiagonalColumnIndexAtFirstRow;
-      let diagonalArray = [];
-      // make a new matrix that is a copy of the original matrix
-      let newMatrix = [...this.rows()];
-      // in order to only check the rows we want to check per iteration
-      // splice the new matrix to remove the first n rows based on the index value passed in
-      newMatrix.splice(0, index);
-      console.log(newMatrix);
 
-      // this counter lets us know what row we are on
-      let counter = 0;
-      // looping through each row
-      // check if our row/col pair is out of bounds
-        // if not, push that value into diagonal array
-        // if it is, break;
-      for (let i = 0; i < newMatrix.length; i++) {
-        if (!this._isInBounds(i, counter + i)) {
-          break;
-        }
-        diagonalArray.push(newMatrix[i][counter + i]);
+      // I: Column Index at First Row
+      // O: true or false based on if there is a conflict in that diagonal
+      // C:
+      // E:
+
+      // given the column index at the first row
+      // we want to traverse down each row and grab the index + 1 of that row
+      // check if that row, col index is within bounds
+      // if yes, we push it to the diagonal array holder
+      // if not, we end our traversal of that diagonal ..?
+      let index = majorDiagonalColumnIndexAtFirstRow;
+      let checkDiagonals = false;
+      let checkRotated = false;
+
+      let diagonals = [];
+      let rotatedDiagonals = [];
+      let rotated180 = [];
+
+      //console.log(this.rows());
+      for (let i = 0; i < this.rows().length; i++) {
+        rotated180.push(this.rows().map(row => row[i]));
       }
 
-      console.log(diagonalArray);
+      //console.log(rotated180);
 
-      return diagonalArray.filter( item => item === 1 ).length > 1 ? true : false;
+      for (let i = 0; i < this.rows().length; i++) {
+        diagonals.push(this.rows()[i][index + i]);
+        rotatedDiagonals.push(rotated180[i][index + i]);
+      }
+
+      //console.log(diagonals);
+      //console.log(rotatedDiagonals);
+
+      return ((diagonals.filter(item => item === 1).length > 1) ||
+             (rotatedDiagonals.filter(item => item === 1 ).length > 1)) ? true : false;
+
+      // ------------------------------------------------------
+      // let index = majorDiagonalColumnIndexAtFirstRow;
+      // let counterAhead = index - 1;
+      // let counterBehind = index;
+
+      // // let diagonalArray = this.rows().map((row) => {
+      // //   counterAhead++;
+      // //   return (row[counterAhead]);
+      // // });
+
+      // // let diagonalArray = this.rows().map((row) => {
+      // //   counterAhead++;
+      // //   if (row[counterAhead] !== undefined) {
+      // //     return (row[counterAhead]);
+      // //   }
+      // // });
+
+      // let diagonalArray = [];
+      // let behindArray = [];
+
+      // for (let i = 0; i < this.rows().length; i++) {
+      //   if (this._isInBounds(i, counterAhead + 1)) {
+      //     diagonalArray.push(this.rows()[i][counterAhead]);
+      //   }
+      //   counterAhead++;
+      // }
+
+      // // I think we can use .join to do another map function to just count behind us as long
+      // //as the row/col is within bounds !
+      // for (let j = this.rows().length - 1; j > 0; j--) {
+      //   counterBehind--;
+      //   if (this._isInBounds(j, counterBehind - 1)) {
+      //     behindArray.push(this.rows()[j][counterBehind]);
+      //   }
+      // }
+
+      // console.log(diagonalArray);
+      // console.log(behindArray);
+
+      // diagonalArray.concat(behindArray);
+
+      // console.log(diagonalArray);
+      // ------------------------------------------------------
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -179,9 +236,7 @@
       // loop through size first row
       // call hasMajorDiagonalConflictAt for each index of the first row
       // check if above function is equal to true, if yes, return true
-      // else return false;
-
-      console.log(this.rows());
+      // else return false
 
       for (let k = 0; k < this.rows().length; k++) {
         if (this.hasMajorDiagonalConflictAt(k)) {
@@ -203,6 +258,7 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      console.log(this.rows());
       return false; // fixme
     }
 
