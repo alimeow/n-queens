@@ -116,8 +116,6 @@
       //   columns.push(this.rows().map(row => row[i]));
       // }
 
-
-
       let col = this.rows().map(row => row[colIndex]);
 
       return col.filter( item => item === 1 ).length > 1 ? true : false;
@@ -161,28 +159,24 @@
       // if yes, we push it to the diagonal array holder
       // if not, we end our traversal of that diagonal ..?
       let index = majorDiagonalColumnIndexAtFirstRow;
-      let checkDiagonals = false;
-      let checkRotated = false;
 
-      let diagonals = [];
-      let rotatedDiagonals = [];
-      let rotated180 = [];
 
-      //console.log(this.rows());
+      let diagonals = []; // array to hold diagonal that we are checking
+      let rotatedDiagonals = []; // array to hold the diagonal of the rotated matrix
+      let rotated180 = []; // array to hold the rotated matrix
+
+      // this function rotates the matrix (basically just grabs the columns so we can check using the same algorithm)
       for (let i = 0; i < this.rows().length; i++) {
         rotated180.push(this.rows().map(row => row[i]));
       }
 
-      //console.log(rotated180);
-
+      // push the diagonals from each matrix, the regular and the rotated, into each diagonal arary
       for (let i = 0; i < this.rows().length; i++) {
         diagonals.push(this.rows()[i][index + i]);
         rotatedDiagonals.push(rotated180[i][index + i]);
       }
 
-      //console.log(diagonals);
-      //console.log(rotatedDiagonals);
-
+      // we run our check, if either of the diagonals have a conflict, then we return true, else we return false
       return ((diagonals.filter(item => item === 1).length > 1) ||
              (rotatedDiagonals.filter(item => item === 1 ).length > 1)) ? true : false;
 
@@ -253,13 +247,45 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      let index = minorDiagonalColumnIndexAtFirstRow;
+      let diagonals = []; // array to hold diagonal that we are checking
+      let rotatedDiagonals = []; // array to hold the diagonal of the rotated matrix
+      let rotated180 = []; // array to hold the rotated matrix
+
+      // this function rotates the matrix (basically just grabs the columns so we can check using the same algorithm)
+      for (let i = this.rows().length - 1; i >= 0; i--) {
+        let container = [];
+        for (let j = this.rows().length - 1; j >= 0; j--) {
+          container.push(this.rows()[i][j]);
+        }
+        rotated180.push(container);
+      }
+
+      //console.log(this.rows());
+      console.log(rotated180);
+
+      // push the diagonals from each matrix, the regular and the rotated, into each diagonal arary
+      for (let i = this.rows().length - 1; i >= 0; i--) {
+        diagonals.push(this.rows()[i][index - i]);
+        rotatedDiagonals.push(rotated180[i][index - i]);
+      }
+
+      //console.log(diagonals);
+      //console.log(rotatedDiagonals);
+
+      // we run our check, if either of the diagonals have a conflict, then we return true, else we return false
+      return ((diagonals.filter(item => item === 1).length > 1) ||
+             (rotatedDiagonals.filter(item => item === 1 ).length > 1)) ? true : false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      console.log(this.rows());
-      return false; // fixme
+      for (let k = this.rows().length - 1; k >= 0; k--) {
+        if (this.hasMinorDiagonalConflictAt(k)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
