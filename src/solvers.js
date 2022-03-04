@@ -16,6 +16,19 @@
 
 
 window.findNRooksSolution = function(n) {
+  // takes in n which is the size of the board n x n
+  // returns matrix with rooks in positions where there are no conflicts
+  var node = {
+    board: null,
+    children: []
+  };
+
+  let newBoard = new Board({n: n});
+  console.log(newBoard.rows());
+  let returnMatrix = [];
+
+  newBoard.togglePiece(0, 0);
+
   var solution = undefined; //fixme
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
